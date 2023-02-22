@@ -84,7 +84,7 @@ public class TokenAPI {
 	}
 	
     private static Token createToken(String username) {
-    	String scopes = "com.webage.data.apis";
+    	String scopes = "com.team6.data.apis";
     	// special case for application user
     	if( username.equalsIgnoreCase("ApiClientApp")) {
     		scopes = "com.webage.auth.apis";
