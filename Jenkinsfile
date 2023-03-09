@@ -31,11 +31,21 @@ node {
 	   description: '', name: 'Pass')]
 	
 	  if(response=="Yes") {
-	  
-	    stage('Release - AuthService') {
-	      sh 'gradle build -x test'
-	      sh 'echo AuthService is ready to release!'
+		  
+	stage('Deploy to Kubenetes cluster - AuthApi') {
+		  sh "docker stop mcc-auth"
+	      sh "kubectl create deployment mcc-auth --image=mcc-auth:v1.0"
+		 //get the value of API_HOST from kubernetes services and set the env variable
+	      sh "set env deployment/mcc-auth API_HOST=\$(kubectl get service/mcc-data -o jsonpath='{.spec.clusterIP}'):8080"
+	      sh "kubectl expose deployment mcc-auth --type=LoadBalancer --port=8081"
 	    }
+	   
 	  }
+    }
+	
+	stage("Production Deployment View"){
+        sh "kubectl get deployments"
+        sh "kubectl get pods"
+        sh "kubectl get services"
     }
 }
